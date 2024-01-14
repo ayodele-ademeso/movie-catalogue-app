@@ -46,3 +46,10 @@ This is a simple Flask application that allows you to manage a catalog of movies
     ```bash
     flask run
 
+    Visit http://localhost:5000 in your browser.
+
+## Routes
+    /: Home page with a form to add new movies.
+    /get_movie/<movie_name>: Search for movies by name.
+    /get_all_movies: Retrieve a list of all movies.
+
