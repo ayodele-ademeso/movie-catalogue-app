@@ -19,7 +19,7 @@ This is a simple Flask application that allows you to manage a catalog of movies
 2. Create a virtual environment:
 
     ```bash
-    python -m venv venv
+    python3 -m venv venv
 
 3. Activate the virtual environment
 
