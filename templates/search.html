@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+</head>
+<body>
+    <h2>Search Results</h2>
+    {% if movies %}
+        <ul>
+            {% for movie in movies %}
+                <li>{{ movie.title }} - {{ movie.genre }} - {{ movie.year }} - {{ movie.rating }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No movies matching your query found.</p>
+    {% endif %}
+</body>
+</html>
