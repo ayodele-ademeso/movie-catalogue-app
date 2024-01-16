@@ -44,7 +44,7 @@ This is a simple Flask application that allows you to manage a catalog of movies
 6. Run app
 
     ```bash
-    flask run
+    flask run --host='0.0.0.0'
 
     Visit http://localhost:5000 in your browser.
 
