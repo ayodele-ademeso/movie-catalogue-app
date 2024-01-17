@@ -5,6 +5,7 @@ This is a simple Flask application that allows you to manage a catalog of movies
 ## Requirements
 
 - Python 3.x
+- Python Venv
 - Flask
 - Boto3
 
