@@ -53,7 +53,6 @@ This is a simple Flask application that allows you to manage a catalog of movies
 ## Routes
 The following routes are available on this API:
 
-    ```bash
     /: API's homepage.
     /health: Checks the health status of the application
     /api/movies: Accepts either a GET request(to get all movies), or a POST request(for adding movies).
