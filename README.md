@@ -15,7 +15,7 @@ This is a simple Flask application that allows you to manage a catalog of movies
 
    ```bash
    git clone https://github.com/ayodele-ademeso/movie-catalogue-app.git
-   cd movie-catalog-app
+   cd movie-catalogue-app
 
 2. Create a virtual environment:
 
@@ -25,6 +25,7 @@ This is a simple Flask application that allows you to manage a catalog of movies
 3. Activate the virtual environment
 
 - On Windows:
+    ```bash
     venv\Scripts\activate
 
 - On Unix or MacOS:
@@ -50,7 +51,12 @@ This is a simple Flask application that allows you to manage a catalog of movies
     Visit http://localhost:5000 in your browser.
 
 ## Routes
-    /: Home page with a form to add new movies.
-    /get_movie/<movie_name>: Search for movies by name.
-    /get_all_movies: Retrieve a list of all movies.
+The following routes are available on this API:
+
+    ```bash
+    /: API's homepage.
+    /health: Checks the health status of the application
+    /api/movies: Accepts either a GET request(to get all movies), or a POST request(for adding movies).
+    /api/search: Returns a movie or list of movies if search parameter matches.
+    /api/movies/<title>: Accepts a PUT method for updating details of a single movie
 
