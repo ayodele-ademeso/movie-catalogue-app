@@ -176,4 +176,4 @@ def update_movie_endpoint(title):
         return jsonify({"message": f"Error updating movie: {str(e)}"}), 500  # Internal Server Error
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True)
+    app.run()
