@@ -44,6 +44,6 @@ spec:
                 secretKeyRef:
                   name: aws-creds
                   key: access_key_id
-          securityContext:
-            runAsNonRoot:  true
-            runAsUser: 1001
+          # securityContext:
+          #   runAsNonRoot:  true
+          #   runAsUser: 1001

@@ -37,7 +37,7 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
-          IMAGE_TAG=${GITHUB_SHA::8}
+          IMAGE_TAG=${GITHUB_SHA::7}
           docker buildx create --use
           docker buildx inspect default --bootstrap
           docker buildx build --file Dockerfile -t $ECR_REGISTRY/$IMAGE_REPO_NAME:$IMAGE_TAG --load .
