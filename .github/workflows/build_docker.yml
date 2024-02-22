@@ -43,3 +43,16 @@ jobs:
           docker buildx build --file Dockerfile -t $ECR_REGISTRY/$IMAGE_REPO_NAME:$IMAGE_TAG --load .
           docker push $ECR_REGISTRY/$IMAGE_REPO_NAME:$IMAGE_TAG
           echo "::set-output name=image::$ECR_REGISTRY/$IMAGE_REPO_NAME:$IMAGE_TAG"
+
+      - name: Update manifest file
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        run: |    
+          IMAGE_TAG=${GITHUB_SHA::7}
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@gmail.com"
+          yq eval '.spec.template.spec.containers[0].image = "$ECR_REGISTRY/$IMAGE_REPO_NAME:$IMAGE_TAG"' -i k8s-manifest/deployment.yml
+          
+          git add .
+          git commit -m "updating new image"
+          git push --set-upstream origin dockerize
