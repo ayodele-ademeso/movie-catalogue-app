@@ -7,7 +7,7 @@ on:
 
 env:
   AWS_REGION: eu-west-2
-  IMAGE_REPO_NAME: movie-service
+  IMAGE_REPO_NAME: aws-ecs-docker
 
 jobs:
   build:
