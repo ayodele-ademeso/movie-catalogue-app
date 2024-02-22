@@ -52,7 +52,6 @@ jobs:
           IMAGE_TAG=${GITHUB_SHA::7}
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@gmail.com"
-          git remote set-url origin "https://github.com/${{ github.repository }}"
           yq eval ".spec.template.spec.containers[0].image = \"\$ECR_REGISTRY/$IMAGE_REPO_NAME:\$IMAGE_TAG\"" -i k8s-manifest/deployment.yml
           
           git add .
