@@ -17,7 +17,7 @@ spec:
       #  - name: ecr-creds
       containers:
         - name: movie-service
-          image: $ECR_REGISTRY/$IMAGE_REPO_NAME:$IMAGE_TAG
+          image: $ECR_REGISTRY/aws-ecs-docker:$IMAGE_TAG
           imagePullPolicy: Always
           ports:
             - containerPort: 8000
