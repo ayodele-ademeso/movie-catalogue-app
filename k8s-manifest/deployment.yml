@@ -13,7 +13,6 @@ spec:
         app: movie-service
     spec:
       # imagePullSecrets:
-
       #  - name: ecr-creds
       containers:
         - name: movie-service
