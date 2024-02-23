@@ -1,0 +1,13 @@
+apiVersion: argoproj.io/v1beta1
+kind: ArgoCD
+metadata:
+  name: movie-argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/ayodele-ademeso/movie-catalogue-app.git
+    targetRevision: HEAD
+    path: k8s-manifest
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default

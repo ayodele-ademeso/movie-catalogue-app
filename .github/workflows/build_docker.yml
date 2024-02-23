@@ -1,0 +1,59 @@
+name: Build and Push to ECR
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  AWS_REGION: eu-west-2
+  IMAGE_REPO_NAME: aws-ecs-docker
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build and Push Docker image
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        run: |
+          IMAGE_TAG=${GITHUB_SHA::7}
+          docker buildx create --use
+          docker buildx inspect default --bootstrap
+          docker buildx build --file Dockerfile -t $ECR_REGISTRY/$IMAGE_REPO_NAME:$IMAGE_TAG --load .
+          docker push $ECR_REGISTRY/$IMAGE_REPO_NAME:$IMAGE_TAG
+          echo "::set-output name=image::$ECR_REGISTRY/$IMAGE_REPO_NAME:$IMAGE_TAG"
+
+      - name: Update manifest file
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |    
+          IMAGE_TAG=${GITHUB_SHA::7}
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@gmail.com"
+          yq eval ".spec.template.spec.containers[0].image = \"$ECR_REGISTRY/$IMAGE_REPO_NAME:$IMAGE_TAG\"" -i k8s-manifest/deployment.yml
+          
+          git add .
+          git commit -m "updating new image"
+          git push --set-upstream origin dockerize

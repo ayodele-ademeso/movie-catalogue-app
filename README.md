@@ -17,45 +17,20 @@ This is a simple Flask application that allows you to manage a catalogue of movi
    git clone https://github.com/ayodele-ademeso/movie-catalogue-app.git
    cd movie-catalogue-app
 
-2. Create a virtual environment:
+2. Build the image with Docker:
 
     ```bash
-    python3 -m venv venv
+    docker build -t movie-library:{$TAG} .
 
-3. Activate the virtual environment
-
-- On Windows:
-    ```bash
-    venv\Scripts\activate
-
-- On Unix or MacOS:
-    ```bash
-    source venv/bin/activate
-
-4. Install dependencies
+3. Run the docker image
 
     ```bash
-    pip install -r requirements.txt
+    docker run --env-file <path/to/your/.env/file> -it movie-library:{$TAG}
 
-5. Set Environment variables
-
-    ```bash
-    export FLASK_APP=app.py
-    export FLASK_ENV=development
-
-6. Run app
+4. Test application
 
     ```bash
-    flask run --host='0.0.0.0'
-
-    Visit http://localhost:5000 in your browser.
-
-7. Deploy app on AWS Lambda using Zappa
-
-    ```bash
-    zappa init
-
-    zappa deploy
+    curl http://localhost:8000
 
 ## Routes
 The following routes are available on this API:

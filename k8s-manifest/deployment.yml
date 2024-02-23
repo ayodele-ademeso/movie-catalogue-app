@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: movie-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: movie-service
+  template:
+    metadata:
+      labels:
+        app: movie-service
+    spec:
+      # imagePullSecrets:
+      #  - name: ecr-creds
+      containers:
+        - name: movie-service
+          image: 440772819144.dkr.ecr.eu-west-2.amazonaws.com/aws-ecs-docker:d24c299
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8000
+          # resources:
+          #   requests:
+          #     cpu: "0.25m"
+          #     memory: "1Gi"
+          #   limits:
+          #     cpu: "0.5m"
+          #     memory: "1Gi"
+          env:
+            - name: AWS_REGION
+              value: eu-west-2
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: aws-creds
+                  key: secret_access_key
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: aws-creds
+                  key: access_key_id
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1001

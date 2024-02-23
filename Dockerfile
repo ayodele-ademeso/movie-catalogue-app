@@ -14,5 +14,7 @@ RUN chown -R flask:flask /app
 
 USER flask
 
+EXPOSE 8000
+
 # CMD ["flask", "run", "--host=0.0.0.0"]
 CMD ["gunicorn", "-w 3", "--bind", "0.0.0.0:8000", "app:app"]

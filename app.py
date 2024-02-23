@@ -128,7 +128,7 @@ def health():
 
 @app.route('/')
 def index():
-    return "Movies API"
+    return "Movies API V2"
 
 @app.route('/api/movies', methods=['GET', 'POST'])
 def movies():
