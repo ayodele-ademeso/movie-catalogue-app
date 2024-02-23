@@ -16,7 +16,7 @@ spec:
       #  - name: ecr-creds
       containers:
         - name: movie-service
-          image: 440772819144.dkr.ecr.eu-west-2.amazonaws.com/aws-ecs-docker:4c61414
+          image: 440772819144.dkr.ecr.eu-west-2.amazonaws.com/aws-ecs-docker:c0eee74
           imagePullPolicy: Always
           ports:
             - containerPort: 8000
