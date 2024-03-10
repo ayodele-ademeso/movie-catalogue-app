@@ -3,11 +3,16 @@ from flask_cors import CORS
 import os
 import csv
 import boto3
+import logging
 from botocore.exceptions import NoCredentialsError
 from io import StringIO
 
 app = Flask(__name__)
 CORS(app)
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # Retrieve environment variables
 AWS_BUCKET_NAME = os.environ.get('AWS_BUCKET_NAME', 'ayodele-csv-bucket')
@@ -35,6 +40,7 @@ def check_and_create_csv():
             s3.put_object(Body=csv_data.getvalue(), Bucket=AWS_BUCKET_NAME, Key=AWS_CSV_FILE_KEY)
         except Exception as create_error:
             print(f"Error creating CSV file: {create_error}")
+            logger.error(f"Error creating CSV file: {create_error}")
             return False
 
         return True
@@ -51,6 +57,7 @@ def read_movies():
         return movies_data
     except NoCredentialsError as e:
         return {"error": f"Error reading movies from S3: {e}"}
+        logger.error(f"Error reading movies from S3: {e}")
 
 def is_duplicate(existing_titles, new_title):
     return any(title.lower() == new_title.lower() for title in existing_titles)
@@ -73,6 +80,7 @@ def write_movies(movie):
         # Check for duplicates before adding
         if is_duplicate(existing_titles, movie["Title"]):
             return {"error": f"Duplicate movie: {movie['Title']}"}, 409  # Conflict
+            logger.warning(f"Duplicate movie: {movie['Title']}")
 
         # Convert the new movie dictionary to a CSV-formatted string
         csv_data = StringIO()
@@ -90,8 +98,10 @@ def write_movies(movie):
 
     except NoCredentialsError as e:
         return {"error": f"Error writing movie to S3: {e}"}, 500  # Internal Server Error
+        logger.error(f"Error writing movie to S3: {e}", 500)
     except Exception as e:
         return {"error": f"Unexpected error: {e}"}, 500  # Internal Server Error
+        logger.error(f"Unexpected error: {e}", 500)
 
 def search_movies(keyword):
     keyword_lower = keyword.lower()
@@ -104,6 +114,7 @@ def update_movie(title, update_data):
 
     if not isinstance(movies, list):
         print("Error: 'read_movies' did not return a list.")
+        logger.error("Error: 'read_movies' did not return a list.")
         return False
 
     # Find the index of the movie with the specified title
@@ -119,6 +130,7 @@ def update_movie(title, update_data):
         return True  # Movie updated successfully
     else:
         print(f"Error: Movie with title '{title}' not found.")
+        logger.error(f"Error: Movie with title '{title}' not found.")
         return False  # Movie not found
 
 @app.route('/health', methods=['GET'])
