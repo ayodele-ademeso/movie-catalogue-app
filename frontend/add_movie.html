@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Catalogue - Add Movie</title>
+</head>
+<body>
+
+  <h1>Movie Catalogue - Add Movie</h1>
+
+  <div>
+    <h2>Movies</h2>
+    <table id="movieTable">
+      <!-- Movies will be dynamically added here -->
+    </table>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script>
+    // Function to load all movies
+    function loadMovies() {
+      $.ajax({
+        url: "https://20rloes980.execute-api.eu-west-2.amazonaws.com/dev/api/movies",
+        type: "GET",
+        success: function(data) {
+          const movieTable = $("#movieTable");
+          movieTable.empty();
+          movieTable.append("<tr><th>Title</th><th>Year</th><th>Genre</th><th>Rating</th></tr>");
+          data.forEach(function(movie) {
+            movieTable.append(`<tr><td>${movie.Title}</td><td>${movie.Year}</td><td>${movie.Genre}</td><td>${movie.Rating}</td></tr>`);
+          });
+        }
+      });
+    }
+
+    // Initial load of movies
+    loadMovies();
+  </script>
+
+</body>
+</html>

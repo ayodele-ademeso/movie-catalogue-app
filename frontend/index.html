@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Catalogue</title>
+</head>
+<body>
+
+  <h1>Movie Catalogue</h1>
+
+  <div>
+    <h2>Add Movie</h2>
+    <form id="addMovieForm">
+      <label for="title">Title:</label>
+      <input type="text" id="title" required>
+      <label for="year">Year:</label>
+      <input type="number" id="year" required>
+      <label for="genre">Genre:</label>
+      <input type="text" id="genre" required>
+      <label for="rating">Rating:</label>
+      <input type="number" id="rating" step="0.1" required>
+      <button type="submit">Add Movie</button>
+    </form>
+  </div>
+
+  <div>
+    <h2>Search</h2>
+    <label for="searchKeyword">Keyword:</label>
+    <input type="text" id="searchKeyword">
+    <button onclick="searchMovies()">Search</button>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script>
+    // Function to add a new movie
+    $("#addMovieForm").submit(function(event) {
+      event.preventDefault();
+      const title = $("#title").val();
+      const year = $("#year").val();
+      const genre = $("#genre").val();
+      const rating = $("#rating").val();
+  
+      const movieData = {
+        "Title": title,
+        "Year": year,
+        "Genre": genre,
+        "Rating": rating
+      };
+  
+      $.ajax({
+        url: "https://20rloes980.execute-api.eu-west-2.amazonaws.com/dev/api/movies",
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify(movieData),
+        success: function() {
+          window.location.href = "add_movie.html";  // Redirect to add_movie.html after adding a movie
+        }
+      });
+    });
+  
+    // Function to search movies
+    function searchMovies() {
+      const keyword = $("#searchKeyword").val();
+      window.location.href = `search_result.html?q=${keyword}`;  // Redirect to search_result.html with the search query
+    }
+  </script>
+  
+
+</body>
+</html>

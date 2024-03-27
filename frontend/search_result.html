@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Catalogue - Search Results</title>
+</head>
+<body>
+
+  <h1>Movie Catalogue - Search Results</h1>
+
+  <div>
+    <h2>Search Results</h2>
+    <table id="searchTable">
+      <!-- Search results will be dynamically added here -->
+    </table>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script>
+    // Function to search movies
+    function searchMovies() {
+      const keyword = new URLSearchParams(window.location.search).get("q");
+      $.ajax({
+        url: `https://20rloes980.execute-api.eu-west-2.amazonaws.com/dev/api/search?q=${keyword}`,
+        type: "GET",
+        success: function(data) {
+          const searchTable = $("#searchTable");
+          searchTable.empty();
+          if (data.length > 0) {
+            searchTable.append("<tr><th>Title</th><th>Year</th><th>Genre</th><th>Rating</th></tr>");
+            data.forEach(function(movie) {
+              searchTable.append(`<tr><td>${movie.Title}</td><td>${movie.Year}</td><td>${movie.Genre}</td><td>${movie.Rating}</td></tr>`);
+            });
+          } else {
+            searchTable.append("<tr><td colspan='4'>No matching movies found</td></tr>");
+          }
+        }
+      });
+    }
+
+    // Initial load of search results
+    searchMovies();
+  </script>
+
+</body>
+</html>
