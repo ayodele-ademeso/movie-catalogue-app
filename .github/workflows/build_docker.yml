@@ -3,11 +3,11 @@ name: Build and Push to ECR
 on:
   push:
     branches:
-      - main
+      - dockerize
 
 env:
   AWS_REGION: eu-west-2
-  IMAGE_REPO_NAME: aws-ecs-docker
+  IMAGE_REPO_NAME: movie-service
 
 jobs:
   build:
@@ -42,6 +42,9 @@ jobs:
           docker buildx inspect default --bootstrap
           docker buildx build --file Dockerfile -t $ECR_REGISTRY/$IMAGE_REPO_NAME:$IMAGE_TAG --load .
           docker push $ECR_REGISTRY/$IMAGE_REPO_NAME:$IMAGE_TAG
+          
+          docker tag $ECR_REGISTRY/$IMAGE_REPO_NAME:$IMAGE_TAG $ECR_REGISTRY/$IMAGE_REPO_NAME:latest
+          docker push $ECR_REGISTRY/$IMAGE_REPO_NAME:latest
           echo "::set-output name=image::$ECR_REGISTRY/$IMAGE_REPO_NAME:$IMAGE_TAG"
 
       - name: Update manifest file
