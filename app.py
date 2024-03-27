@@ -17,15 +17,11 @@ logger = logging.getLogger(__name__)
 # Retrieve environment variables
 AWS_BUCKET_NAME = os.environ.get('AWS_BUCKET_NAME', 'ayodele-csv-bucket')
 AWS_CSV_FILE_KEY = os.environ.get('AWS_CSV_FILE_KEY', 'movies.csv')
-AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID', '')
-AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY', '')
-AWS_REGION = os.environ.get('AWS_REGION', '')
 
 
 def check_and_create_csv():
     # Initialize S3 client
-    s3 = boto3.client('s3', aws_access_key_id=AWS_ACCESS_KEY_ID, 
-                        aws_secret_access_key=AWS_SECRET_ACCESS_KEY, region_name=AWS_REGION)
+    s3 = boto3.client('s3')
     try:
         # Check if the CSV file exists in the S3 bucket
         s3.head_object(Bucket=AWS_BUCKET_NAME, Key=AWS_CSV_FILE_KEY)
@@ -49,8 +45,7 @@ def check_and_create_csv():
 check_and_create_csv()
 
 def read_movies():
-    s3 = boto3.client('s3', aws_access_key_id=AWS_ACCESS_KEY_ID, 
-                        aws_secret_access_key=AWS_SECRET_ACCESS_KEY, region_name=AWS_REGION)
+    s3 = boto3.client('s3')
     try:
         response = s3.get_object(Bucket=AWS_BUCKET_NAME, Key=AWS_CSV_FILE_KEY)
         movies_data = list(csv.DictReader(response['Body'].read().decode('utf-8').splitlines()))
@@ -63,8 +58,7 @@ def is_duplicate(existing_titles, new_title):
     return any(title.lower() == new_title.lower() for title in existing_titles)
 
 def write_movies(movie):
-    s3 = boto3.client('s3', aws_access_key_id=AWS_ACCESS_KEY_ID, 
-                        aws_secret_access_key=AWS_SECRET_ACCESS_KEY, region_name=AWS_REGION)
+    s3 = boto3.client('s3')
 
     try:
         # Read the existing content of the CSV file
