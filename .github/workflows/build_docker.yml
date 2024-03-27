@@ -3,11 +3,11 @@ name: Build and Push to ECR
 on:
   push:
     branches:
-      - main
+      - dockerize
 
 env:
   AWS_REGION: eu-west-2
-  IMAGE_REPO_NAME: aws-ecs-docker
+  IMAGE_REPO_NAME: movie-service
 
 jobs:
   build:
