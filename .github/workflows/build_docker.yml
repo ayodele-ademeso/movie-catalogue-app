@@ -59,4 +59,4 @@ jobs:
           
           git add .
           git commit -m "updating new image"
-          git push --set-upstream origin main
+          git push --set-upstream origin dockerize
